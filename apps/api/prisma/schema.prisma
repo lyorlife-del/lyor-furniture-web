@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+model Product {
+  id String @id
+  sku String @unique
+  slug String @unique
+  name String
+  category String
+  description String
+  image String
+  images Json
+  material String
+  dimensions String
+  color String
+  monthlyPaise Int
+  purchasePaise Int
+  depositPaise Int @default(0)
+  stock Int
+  active Boolean @default(true)
+  published Boolean @default(true)
+  companyId String @default("lyor-demo")
+  cities String[]
+  variants Json
+  components Json
+  featured Boolean @default(false)
+  createdAt DateTime @default(now())
+  reservations Reservation[]
+}
+model Cart {
+  id String @id @default(uuid())
+  ownerId String?
+  city String @default("noida")
+  lines Json @default("[]")
+  revision Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quotes Quote[]
+}
+model Quote {
+  cart Cart @relation(fields: [cartId], references: [id])
+  order OrderIntent?
+  id String @id @default(uuid())
+  cartId String
+  cartRevision Int
+  ownerId String?
+  city String
+  pin String
+  lines Json
+  breakdown Json
+  policyVersion String
+  signature String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+model OrderIntent {
+  quote Quote @relation(fields: [quoteId], references: [id])
+  outbox OutboxEvent?
+  reservations Reservation[]
+  id String @id @default(uuid())
+  ownerId String
+  companyId String @default("lyor-demo")
+  idempotencyKey String
+  requestHash String
+  quoteId String @unique
+  city String
+  address Json
+  lines Json
+  breakdown Json
+  orderState String @default("pending")
+  paymentState String @default("not_collected")
+  stockState String @default("unreserved")
+  deliveryState String @default("not_scheduled")
+  externalId String? @unique
+  failureReason String?
+  attempts Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([ownerId, idempotencyKey])
+}
+model OutboxEvent {
+  order OrderIntent @relation(fields: [orderId], references: [id])
+  id String @id @default(uuid())
+  orderId String @unique
+  status String @default("pending")
+  leaseUntil DateTime?
+  availableAt DateTime @default(now())
+  attempts Int @default(0)
+  lastError String?
+  createdAt DateTime @default(now())
+}
+model Reservation {
+  order OrderIntent @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  id String @id @default(uuid())
+  orderId String
+  productId String
+  quantity Int
+  @@unique([orderId, productId])
+}
+model BusinessEnquiry {
+  id String @id @default(uuid())
+  idempotencyKey String @unique
+  requestHash String
+  contact Json
+  sites Json
+  mode String
+  status String @default("received")
+  createdAt DateTime @default(now())
+}
+model AuditLog {
+  id String @id @default(uuid())
+  actorId String
+  action String
+  entityId String
+  detail Json
+  createdAt DateTime @default(now())
+}

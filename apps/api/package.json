@@ -1,0 +1,44 @@
+{
+  "name": "@lyor/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json && node dist/main.js",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "worker": "tsc -p tsconfig.build.json && node dist/worker.js",
+    "seed": "tsx prisma/seed.ts",
+    "import:pilot": "ts-node prisma/import-pilot-products.ts",
+    "contracts": "ts-node scripts/contracts.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "@fastify/static": "^10.1.2",
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-fastify": "^11.1.0",
+    "@nestjs/swagger": "^11.2.0",
+    "@prisma/client": "6.19.3",
+    "bullmq": "^5.70.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "dotenv": "^17.3.0",
+    "fastify": "^5.7.0",
+    "ioredis": "^5.9.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^24.10.0",
+    "@types/supertest": "^6.0.3",
+    "jest": "^29.7.0",
+    "prisma": "6.19.3",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

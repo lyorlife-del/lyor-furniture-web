@@ -1,0 +1,17 @@
+# Local demo image only. Production identity/integrations are deliberately gated.
+FROM node:26-bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY package*.json ./
+COPY apps/api/package.json apps/api/package.json
+COPY apps/web/package.json apps/web/package.json
+COPY packages/ui/package.json packages/ui/package.json
+COPY packages/api-contracts/package.json packages/api-contracts/package.json
+COPY apps/api/prisma apps/api/prisma
+RUN npm ci && npm run db:generate
+COPY apps/api apps/api
+RUN npm run build -w @lyor/api
+ENV NODE_ENV=development DEMO_MODE=true API_HOST=0.0.0.0
+USER node
+EXPOSE 4000
+CMD ["node", "apps/api/dist/main.js"]

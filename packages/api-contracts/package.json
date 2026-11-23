@@ -1,0 +1,15 @@
+{
+  "name": "@lyor/api-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "types": "src/schema.d.ts",
+  "dependencies": {
+    "openapi-fetch": "^0.15.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/schema.d.ts"
+    },
+    "./client": "./src/client.ts"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "lyor-furniture",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.22.1"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n web,api \"npm run dev -w @lyor/web\" \"npm run dev -w @lyor/api\"",
+    "build": "npm run build -w @lyor/api && npm run build -w @lyor/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "playwright test",
+    "db:generate": "prisma generate --schema apps/api/prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema apps/api/prisma/schema.prisma",
+    "db:seed": "npm run seed -w @lyor/api",
+    "infra:up": "docker compose up -d postgres redis",
+    "infra:down": "docker compose down",
+    "worker": "npm run worker -w @lyor/api",
+    "contracts": "npm run contracts -w @lyor/api && openapi-typescript packages/api-contracts/openapi.json -o packages/api-contracts/src/schema.d.ts",
+    "setup:local": "node scripts/setup-local.mjs",
+    "db:local": "node scripts/local-postgres.mjs",
+    "test:db": "node scripts/test-database.mjs",
+    "format": "prettier --write apps packages scripts tests",
+    "docs:check": "node scripts/check-docs.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "concurrently": "^9.2.1",
+    "embedded-postgres": "^18.7.0-beta.19",
+    "openapi-typescript": "^7.10.1",
+    "prettier": "^3.10.1",
+    "ts-node": "^10.9.2",
+    "@fastify/static": "^10.1.2"
+  }
+}

@@ -13,3 +13,13 @@ Thumbs.db
 # Local editor settings
 .vscode/
 .idea/
+
+# Application dependencies, builds, verification output and local infrastructure
+node_modules/
+.next/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.data/

@@ -1,0 +1,1280 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "operationId": "readiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/catalog": {
+      "get": {
+        "operationId": "listCatalog",
+        "parameters": [
+          {
+            "name": "city",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mode",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Catalog"
+        ]
+      }
+    },
+    "/api/v1/products/{slug}": {
+      "get": {
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Catalog"
+        ]
+      }
+    },
+    "/api/v1/bundles": {
+      "get": {
+        "operationId": "listBundles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Catalog"
+        ]
+      }
+    },
+    "/api/v1/cities": {
+      "get": {
+        "operationId": "listCities",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability": {
+      "get": {
+        "operationId": "checkServiceability",
+        "parameters": [
+          {
+            "name": "pin",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceabilityResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/cart/{id}": {
+      "get": {
+        "operationId": "getCart",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/v1/cart": {
+      "put": {
+        "operationId": "saveCart",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Cart"
+        ]
+      }
+    },
+    "/api/v1/quotes": {
+      "post": {
+        "operationId": "createQuote",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Pricing"
+        ]
+      }
+    },
+    "/api/v1/orders": {
+      "post": {
+        "operationId": "createOrder",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/v1/me/orders": {
+      "get": {
+        "operationId": "listMyOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/v1/me/orders/{id}": {
+      "get": {
+        "operationId": "getMyOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/api/v1/b2b/enquiries": {
+      "post": {
+        "operationId": "createBusinessEnquiry",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnquiryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnquiryResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Business"
+        ]
+      }
+    },
+    "/api/v1/admin/catalog": {
+      "get": {
+        "operationId": "adminCatalog",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/catalog/{id}": {
+      "patch": {
+        "operationId": "publishListing",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/exceptions": {
+      "get": {
+        "operationId": "integrationExceptions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/api/v1/admin/exceptions/{id}/replay": {
+      "post": {
+        "operationId": "replayException",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "Admin"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "LYOR local demo API",
+    "description": "Synthetic demo only. No live ERP or financial effects.",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "VariantResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "monthlyDeltaPaise": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "monthlyDeltaPaise"
+        ]
+      },
+      "ComponentResponse": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "quantity"
+        ]
+      },
+      "ProductResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "material": {
+            "type": "string"
+          },
+          "dimensions": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "monthlyPaise": {
+            "type": "number"
+          },
+          "purchasePaise": {
+            "type": "number"
+          },
+          "depositPaise": {
+            "type": "number"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariantResponse"
+            }
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComponentResponse"
+            }
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "demo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "category",
+          "description",
+          "image",
+          "images",
+          "material",
+          "dimensions",
+          "color",
+          "monthlyPaise",
+          "purchasePaise",
+          "depositPaise",
+          "available",
+          "cities",
+          "variants",
+          "components",
+          "featured",
+          "demo"
+        ]
+      },
+      "CatalogResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductResponse"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "pageSize": {
+            "type": "number"
+          },
+          "demo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "pageSize",
+          "demo"
+        ]
+      },
+      "ServiceabilityResponse": {
+        "type": "object",
+        "properties": {
+          "pin": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "deliverable": {
+            "type": "boolean"
+          },
+          "demo": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pin",
+          "city",
+          "deliverable",
+          "demo",
+          "message"
+        ]
+      },
+      "LineDto": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "rent",
+              "buy"
+            ]
+          },
+          "quantity": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "variantId": {
+            "type": "string"
+          },
+          "tenure": {
+            "type": "number",
+            "enum": [
+              3,
+              6,
+              12
+            ]
+          }
+        },
+        "required": [
+          "productId",
+          "mode",
+          "quantity",
+          "variantId",
+          "tenure"
+        ]
+      },
+      "CartProductResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "monthlyPaise": {
+            "type": "number"
+          },
+          "purchasePaise": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "image",
+          "monthlyPaise",
+          "purchasePaise"
+        ]
+      },
+      "CartResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineDto"
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartProductResponse"
+            }
+          },
+          "revision": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "city",
+          "lines",
+          "products",
+          "revision",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CartDto": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "city": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "number"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineDto"
+            }
+          }
+        },
+        "required": [
+          "cartId",
+          "city",
+          "revision",
+          "lines"
+        ]
+      },
+      "QuoteDto": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pin": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cartId",
+          "pin"
+        ]
+      },
+      "PricedLineResponse": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "rent",
+              "buy"
+            ]
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "variantId": {
+            "type": "string"
+          },
+          "tenure": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unitPaise": {
+            "type": "number"
+          },
+          "totalPaise": {
+            "type": "number"
+          },
+          "depositPaise": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "productId",
+          "mode",
+          "quantity",
+          "variantId",
+          "tenure",
+          "name",
+          "unitPaise",
+          "totalPaise",
+          "depositPaise"
+        ]
+      },
+      "BreakdownResponse": {
+        "type": "object",
+        "properties": {
+          "subtotalPaise": {
+            "type": "number"
+          },
+          "depositPaise": {
+            "type": "number"
+          },
+          "deliveryPaise": {
+            "type": "number"
+          },
+          "gstPaise": {
+            "type": "number"
+          },
+          "totalPaise": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "taxLabel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subtotalPaise",
+          "depositPaise",
+          "deliveryPaise",
+          "gstPaise",
+          "totalPaise",
+          "currency",
+          "taxLabel"
+        ]
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "cartId": {
+            "type": "string"
+          },
+          "cartRevision": {
+            "type": "number"
+          },
+          "ownerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string"
+          },
+          "pin": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PricedLineResponse"
+            }
+          },
+          "breakdown": {
+            "$ref": "#/components/schemas/BreakdownResponse"
+          },
+          "policyVersion": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "demo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "cartId",
+          "cartRevision",
+          "ownerId",
+          "city",
+          "pin",
+          "lines",
+          "breakdown",
+          "policyVersion",
+          "signature",
+          "expiresAt",
+          "demo"
+        ]
+      },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "pin": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "phone",
+          "street",
+          "pin"
+        ]
+      },
+      "CheckoutDto": {
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "consent": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "quoteId",
+          "signature",
+          "address",
+          "consent"
+        ]
+      },
+      "OrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressDto"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PricedLineResponse"
+            }
+          },
+          "breakdown": {
+            "$ref": "#/components/schemas/BreakdownResponse"
+          },
+          "orderState": {
+            "type": "string"
+          },
+          "paymentState": {
+            "type": "string"
+          },
+          "stockState": {
+            "type": "string"
+          },
+          "deliveryState": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "city",
+          "address",
+          "lines",
+          "breakdown",
+          "orderState",
+          "paymentState",
+          "stockState",
+          "deliveryState",
+          "externalId",
+          "failureReason",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "SiteDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "pin": {
+            "type": "string"
+          },
+          "units": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "pin",
+          "units"
+        ]
+      },
+      "EnquiryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "rent",
+              "buy"
+            ]
+          },
+          "consent": {
+            "type": "boolean"
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SiteDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "company",
+          "mode",
+          "consent",
+          "sites"
+        ]
+      },
+      "EnquiryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "demo": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "demo"
+        ]
+      },
+      "PublishDto": {
+        "type": "object",
+        "properties": {
+          "published": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "published"
+        ]
+      }
+    }
+  }
+}

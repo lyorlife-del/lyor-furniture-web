@@ -1,0 +1,634 @@
+[
+  {
+    "sku": "B07",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Bed - Single",
+    "designCount": 2,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "B08",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Bed - Queen Size",
+    "designCount": 2,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "B09",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Bed - King Size",
+    "designCount": 2,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "B10",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Bedside Table",
+    "designCount": 2,
+    "monthlyPaise": 17000
+  },
+  {
+    "sku": "B11",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Chest of Drawers",
+    "designCount": 1,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "B12",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Study Table",
+    "designCount": 2,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "B13",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Study Chair",
+    "designCount": 2,
+    "monthlyPaise": 14000
+  },
+  {
+    "sku": "B14",
+    "tier": "Basic",
+    "category": "Dining",
+    "name": "Dining Table",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "B15",
+    "tier": "Basic",
+    "category": "Dining",
+    "name": "Dining Chair",
+    "designCount": 2,
+    "monthlyPaise": 17000
+  },
+  {
+    "sku": "B16",
+    "tier": "Basic",
+    "category": "Living",
+    "name": "Sofa - 2 Seater",
+    "designCount": 2,
+    "monthlyPaise": 100000
+  },
+  {
+    "sku": "B17",
+    "tier": "Basic",
+    "category": "Living",
+    "name": "Sofa - 3 Seater",
+    "designCount": 2,
+    "monthlyPaise": 134000
+  },
+  {
+    "sku": "B18",
+    "tier": "Basic",
+    "category": "Living",
+    "name": "Coffee Table",
+    "designCount": 2,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "B19",
+    "tier": "Basic",
+    "category": "Living",
+    "name": "Arm Chair",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "B20",
+    "tier": "Basic",
+    "category": "Living",
+    "name": "End Table",
+    "designCount": 2,
+    "monthlyPaise": 17000
+  },
+  {
+    "sku": "B21",
+    "tier": "Basic",
+    "category": "Accessories",
+    "name": "Mirrors",
+    "designCount": 1,
+    "monthlyPaise": 27000
+  },
+  {
+    "sku": "B22",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Mattress - Foam",
+    "designCount": 1,
+    "monthlyPaise": 14000
+  },
+  {
+    "sku": "B23",
+    "tier": "Basic",
+    "category": "Bedroom",
+    "name": "Mattress - HR Foam",
+    "designCount": 1,
+    "monthlyPaise": 20000
+  },
+  {
+    "sku": "P07",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Bed - Single",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "P08",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Bed - Queen Size",
+    "designCount": 6,
+    "monthlyPaise": 120000
+  },
+  {
+    "sku": "P09",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Bed - King Size",
+    "designCount": 6,
+    "monthlyPaise": 134000
+  },
+  {
+    "sku": "P10",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Bedside Table",
+    "designCount": 6,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "P11",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Study Table",
+    "designCount": 3,
+    "monthlyPaise": 47000
+  },
+  {
+    "sku": "P12",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Study Chair",
+    "designCount": 4,
+    "monthlyPaise": 20000
+  },
+  {
+    "sku": "P13",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "TV Console",
+    "designCount": 6,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "P14",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Arm Chair",
+    "designCount": 6,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P15",
+    "tier": "Premium",
+    "category": "Storage",
+    "name": "Sideboard",
+    "designCount": 4,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P16",
+    "tier": "Premium",
+    "category": "Dining",
+    "name": "Dining Table",
+    "designCount": 4,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "P17",
+    "tier": "Premium",
+    "category": "Dining",
+    "name": "Dining Chair",
+    "designCount": 4,
+    "monthlyPaise": 27000
+  },
+  {
+    "sku": "P18",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "Sofa - 2 Seater",
+    "designCount": 4,
+    "monthlyPaise": 120000
+  },
+  {
+    "sku": "P19",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "Sofa - 3 Seater",
+    "designCount": 4,
+    "monthlyPaise": 160000
+  },
+  {
+    "sku": "P20",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "Sofa - Sectional",
+    "designCount": 4,
+    "monthlyPaise": 200000
+  },
+  {
+    "sku": "P21",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "Coffee Table",
+    "designCount": 4,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "P22",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "Arm Chair",
+    "designCount": 8,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P23",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "TV Console",
+    "designCount": 4,
+    "monthlyPaise": 94000
+  },
+  {
+    "sku": "P24",
+    "tier": "Premium",
+    "category": "Living",
+    "name": "End Table",
+    "designCount": 8,
+    "monthlyPaise": 30000
+  },
+  {
+    "sku": "P25",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Console",
+    "designCount": 8,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P26",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Bookshelves",
+    "designCount": 2,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P27",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Wall Shelves",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "P28",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Mirrors",
+    "designCount": 4,
+    "monthlyPaise": 40000
+  },
+  {
+    "sku": "P29",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Paintings",
+    "designCount": 50,
+    "monthlyPaise": 9000
+  },
+  {
+    "sku": "P30",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Floor Lamps",
+    "designCount": 6,
+    "monthlyPaise": 14000
+  },
+  {
+    "sku": "P31",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Table Lamps",
+    "designCount": 6,
+    "monthlyPaise": 14000
+  },
+  {
+    "sku": "P32",
+    "tier": "Premium",
+    "category": "Accessories",
+    "name": "Carpets",
+    "designCount": 8,
+    "monthlyPaise": 44000
+  },
+  {
+    "sku": "P33",
+    "tier": "Premium",
+    "category": "Storage",
+    "name": "Shoe Cabinet",
+    "designCount": 4,
+    "monthlyPaise": 40000
+  },
+  {
+    "sku": "P34",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Mattress - Ortho",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "P35",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Mattress - Memory Foam",
+    "designCount": 2,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P36",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Mattress - Spring",
+    "designCount": 1,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "P37",
+    "tier": "Premium",
+    "category": "Bedroom",
+    "name": "Mattress - Latex",
+    "designCount": 1,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "L07",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Bed - Queen Size",
+    "designCount": 8,
+    "monthlyPaise": 147000
+  },
+  {
+    "sku": "L08",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Bed - King Size",
+    "designCount": 8,
+    "monthlyPaise": 160000
+  },
+  {
+    "sku": "L09",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Bedside Table",
+    "designCount": 8,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "L10",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Study Table",
+    "designCount": 4,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L11",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Study Chair",
+    "designCount": 6,
+    "monthlyPaise": 34000
+  },
+  {
+    "sku": "L12",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "TV Console",
+    "designCount": 8,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "L13",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Arm Chair",
+    "designCount": 6,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L14",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Ottoman",
+    "designCount": 4,
+    "monthlyPaise": 40000
+  },
+  {
+    "sku": "L15",
+    "tier": "Luxury",
+    "category": "Storage",
+    "name": "Sideboard",
+    "designCount": 6,
+    "monthlyPaise": 100000
+  },
+  {
+    "sku": "L16",
+    "tier": "Luxury",
+    "category": "Dining",
+    "name": "Dining Table",
+    "designCount": 6,
+    "monthlyPaise": 120000
+  },
+  {
+    "sku": "L17",
+    "tier": "Luxury",
+    "category": "Dining",
+    "name": "Dining Chair",
+    "designCount": 6,
+    "monthlyPaise": 47000
+  },
+  {
+    "sku": "L18",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "Sofa - 2 Seater",
+    "designCount": 6,
+    "monthlyPaise": 140000
+  },
+  {
+    "sku": "L19",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "Sofa - 3 Seater",
+    "designCount": 6,
+    "monthlyPaise": 187000
+  },
+  {
+    "sku": "L20",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "Sofa - Sectional",
+    "designCount": 6,
+    "monthlyPaise": 267000
+  },
+  {
+    "sku": "L21",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "Coffee Table",
+    "designCount": 6,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "L22",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "Arm Chair",
+    "designCount": 10,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "L23",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "TV Console",
+    "designCount": 8,
+    "monthlyPaise": 147000
+  },
+  {
+    "sku": "L24",
+    "tier": "Luxury",
+    "category": "Living",
+    "name": "End Table",
+    "designCount": 10,
+    "monthlyPaise": 47000
+  },
+  {
+    "sku": "L25",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Console",
+    "designCount": 12,
+    "monthlyPaise": 107000
+  },
+  {
+    "sku": "L26",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Bookshelves",
+    "designCount": 4,
+    "monthlyPaise": 134000
+  },
+  {
+    "sku": "L27",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Wall Shelves",
+    "designCount": 6,
+    "monthlyPaise": 80000
+  },
+  {
+    "sku": "L28",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Mirrors",
+    "designCount": 8,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "L29",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Paintings",
+    "designCount": 100,
+    "monthlyPaise": 11000
+  },
+  {
+    "sku": "L30",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Floor Lamps",
+    "designCount": 10,
+    "monthlyPaise": 30000
+  },
+  {
+    "sku": "L31",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Table Lamps",
+    "designCount": 10,
+    "monthlyPaise": 30000
+  },
+  {
+    "sku": "L32",
+    "tier": "Luxury",
+    "category": "Accessories",
+    "name": "Carpets",
+    "designCount": 15,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L33",
+    "tier": "Luxury",
+    "category": "Storage",
+    "name": "Shoe Cabinet",
+    "designCount": 8,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L34",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Mattress - Ortho",
+    "designCount": 2,
+    "monthlyPaise": 54000
+  },
+  {
+    "sku": "L35",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Mattress - Memory Foam",
+    "designCount": 2,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L36",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Mattress - Spring",
+    "designCount": 1,
+    "monthlyPaise": 67000
+  },
+  {
+    "sku": "L37",
+    "tier": "Luxury",
+    "category": "Bedroom",
+    "name": "Mattress - Latex",
+    "designCount": 1,
+    "monthlyPaise": 80000
+  }
+]

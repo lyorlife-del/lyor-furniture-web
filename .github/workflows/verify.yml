@@ -1,0 +1,61 @@
+name: Verify local marketplace
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: lyor
+          POSTGRES_PASSWORD: ci_local_only
+          POSTGRES_DB: lyor_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U lyor -d lyor_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      NODE_ENV: test
+      DEMO_MODE: "true"
+      DATABASE_URL: postgresql://lyor:ci_local_only@127.0.0.1:5432/lyor_ci?schema=public
+      REDIS_URL: redis://127.0.0.1:6379
+      QUOTE_SECRET: isolated-ci-demo-secret-at-least-32-characters
+      WEB_ORIGIN: http://127.0.0.1:3000
+      RUN_DB_TESTS: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run setup:local
+      - run: npm run db:generate
+      - run: npm run db:migrate
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run db:seed
+      - run: npm run contracts
+      - run: git diff --exit-code -- packages/api-contracts
+      - run: npm run docs:check
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            playwright-report/
+            test-results/
+            .data/screenshots/
