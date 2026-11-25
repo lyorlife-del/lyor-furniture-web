@@ -8,9 +8,11 @@ Migrate the existing application in place. Preserve the approved UI, routes, pri
 | 01 FastAPI foundation | Accepted | Parallel service, OpenAPI, settings, readiness, and auth tests |
 | 02 PostgreSQL and Alembic | Accepted | Fresh install and restored-copy schema and record equivalence |
 | 03 API and frontend parity | Accepted | 18-operation differential suite, cross-language vectors, and browser parity |
-| 04 Celery and outbox | Evidence complete, awaiting acceptance | Durable delivery, replay, failure recovery, and queue reconciliation |
-| 05 Integration compatibility | Awaiting Phase 04 acceptance | Mock parity and approved sandbox evidence for applicable adapters |
-| 06 GCP staging | Pending | Container checks, worker pool lifecycle, scaling, cost, shutdown, and revision rollback |
+| 04 Celery and outbox | Accepted | Durable delivery, replay, failure recovery, and queue reconciliation |
+| 05 Integration compatibility | In progress, awaiting Odoo inventory and rental setup | Real-product catalogue pilot first, followed by mock parity and approved sandbox evidence |
+| 06 GCP staging | Awaiting Phase 05 acceptance | Container checks, worker pool lifecycle, scaling, cost, shutdown, and revision rollback |
 | 07 Production readiness | Pending | Single-writer cutover rehearsal, rollback approval, and explicit production authorization |
 
 Read the [phase index](implementation/backend-migration-plan.md), [decision register](DECISIONS.md), and [implementation history](DEVELOPMENT_CHANGELOG.md). Report test outcomes and stop for acceptance at the end of each phase.
+
+Use the [Odoo staging rollout](odoo/plan/implementation-plan.md) to complete the inventory and rental prerequisites for Phase 05.

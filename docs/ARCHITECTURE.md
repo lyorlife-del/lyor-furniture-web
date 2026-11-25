@@ -16,5 +16,6 @@ The approved target is a Python 3.12 FastAPI modular monolith with Uvicorn, Pyda
 | [Database design](architecture/database-design.md) | Eight-table preservation and Alembic adoption |
 | [Celery design](architecture/celery-worker-design.md) | Dispatch, processing, and queue reconciliation |
 | [GCP deployment](architecture/gcp-deployment.md) | Service topology, verification, and rollback |
+| [Odoo 19 architecture and rollout](odoo/README.md) | Catalogue, inventory, rental pricing, and fulfilment boundaries |
 
 The [historical architecture](../doc/architecture.md) describes the current legacy implementation. The [master plan](MASTER_IMPLEMENTATION_PLAN.md) records approved changes and evidence.

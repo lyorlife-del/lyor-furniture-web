@@ -54,3 +54,34 @@ The user accepted API and storefront parity and authorized Phase 04 worker migra
 - Guarded unsafe replay in `apps/api/app/api/v1/staff.py` and `apps/api/src/modules/admin/module.ts`. Updated the request body in `apps/web/src/app/admin/page.tsx` for the existing admin recovery action. The existing replay route now returns HTTP 409 when an order reference requires manual reconciliation. PostgreSQL schema and migration history were preserved.
 - Added the read-only BullMQ inventory in `scripts/reconcile-bullmq.mjs` and the rehearsal in `tests/parity/phase04-worker.mjs`. All seven worker scenarios passed, including real Redis interruption, worker crash and rollback, browser replay, and paused-queue handover. The FastAPI suite passed 35 tests and the legacy NestJS suite passed 15 tests. The legacy build and Python lock check passed.
 - Phase 04 awaits acceptance. Rollback starts by stopping the Celery dispatcher and accounting for active deliveries against the PostgreSQL outbox before restoring BullMQ consumption. Production cutover and cloud worker validation remain pending. See the [Phase 04 verification and rollback procedure](implementation/phase-04-celery-outbox.md).
+
+## 2026-11-25 — Phase 05 started
+
+- The user authorized continuing past Phase 04 and requested storefront verification of actual Odoo products before the broader adapter work.
+- Added the read-only SKU check in `apps/api/app/integrations/odoo_catalog.py` and the mocked transport tests in `apps/api/tests/test_odoo_catalog.py`. The check adds a local CLI command and makes no HTTP route, storefront, or database schema changes. To roll it back, remove the standalone CLI and its tests.
+- Python tests returned 39 passed, including all six catalogue checks. Three existing PostgreSQL tests skipped because the isolated test launch did not configure a database. Documentation links passed. The CLI exited with code 1 when Odoo configuration was missing.
+- Live verification awaits approved Odoo product access and the furniture SKU and display mappings. See the [Phase 05 catalogue pilot](implementation/phase-05-integrations.md).
+
+## 2026-11-25 — Odoo staging product access verified
+
+- Authenticated JSON-2 product and metadata reads returned HTTP 200. Local pilot SKUs returned zero matches. Five sampled furniture variants had image data, empty Internal References, and disabled rental and publication flags. A rental-enabled sample also returned records.
+- Product selection and the approved rental rate, Noida availability, and publication mappings remain open. This step updated documentation and wrote no Odoo or PostgreSQL business data. See the [Phase 05 catalogue evidence](implementation/phase-05-integrations.md).
+
+## 2026-11-25 — Phase 05 display-only preview verified
+
+- Added variant-ID reads to `apps/api/app/integrations/odoo_catalog.py` and a guarded projection command in `apps/api/app/integrations/odoo_preview.py`. Tests are in `apps/api/tests/test_odoo_catalog.py` and `apps/api/tests/test_odoo_preview.py`. The preview writes only to a disposable, explicitly named PostgreSQL database. The API routes, database schema, and frontend source are preserved.
+- Verified all five requested IDs against live staging, passed 45 Python tests with disposable PostgreSQL, and passed the Playwright storefront check using a synthetic listing. The browser displayed the expected image and monthly rate, opened the product details, and disabled the cart action.
+- Rollback is stopping the isolated preview and discarding its database. The live catalogue pilot still requires approved product selection and rate, image, and Noida availability mappings. Phase 05 remains in progress.
+
+## 2026-11-25 — User-selected Odoo templates resolved
+
+- Authenticated staging reads confirmed that action 2967 opens product templates. Resolved the five supplied IDs to ten active variants. One template has six finish and size combinations.
+- Staged and decoded five WebP template photos in ignored `.data/phase05-odoo-assets/`. Recorded the mapping and pending rate and location fields in the local selection file. No application, schema, or operational data changes were made. Rollback is discarding the staged local assets.
+- The five templates have no configured rental rules. The warehouse-name search returned no Noida match. Confirm rates and serviceable location, and select the table variants. See the [Phase 05 product mapping](implementation/phase-05-integrations.md).
+
+## 2026-11-25 — Odoo staging plan drafted
+
+- Added the [Odoo documentation index](odoo/README.md), area architecture, staged implementation checklist, setup runbooks and operational flows under `docs/odoo/`. Linked them from the architecture, marketplace master plan and Phase 05 record.
+- Recorded owner decisions, prerequisites, verification and rollback for product setup, physical inventory, rentals and marketplace handoff. The documentation step changes no application code, API contract, database schema or Odoo data.
+- `npm.cmd run docs:check` passed for 189 Markdown documents. `git diff --check` passed. Odoo configuration and storefront acceptance tests remain part of the staging rollout.
+- Phase 05 remains open while staging inventory and rental setup are pending. Phase 06 waits for Phase 05 acceptance.
