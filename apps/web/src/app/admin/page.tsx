@@ -156,7 +156,7 @@ export default function Admin() {
                           try {
                             await api(
                               "admin/exceptions/" + event.id + "/replay",
-                              { method: "POST" },
+                              { method: "POST", body: JSON.stringify({}) },
                             );
                             await load();
                           } catch (e) {

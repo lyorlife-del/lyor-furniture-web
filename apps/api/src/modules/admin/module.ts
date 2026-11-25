@@ -62,6 +62,17 @@ export class AdminService {
       });
       if (!event)
         throw new ConflictException("Only failed events can be replayed");
+      const order = await tx.orderIntent.findUniqueOrThrow({
+        where: { id: event.orderId },
+        select: { id: true, externalId: true },
+      });
+      if (
+        event.lastError?.startsWith("Manual reconciliation required:") ||
+        (order.externalId !== null && order.externalId !== "DEMO-" + order.id)
+      )
+        throw new ConflictException(
+          "Resolve manual reconciliation before requesting replay",
+        );
       await tx.orderIntent.update({
         where: { id: event.orderId },
         data: { orderState: "pending", failureReason: null },

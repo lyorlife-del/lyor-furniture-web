@@ -23,3 +23,6 @@ playwright-report/
 test-results/
 *.tsbuildinfo
 .data/
+.venv/
+__pycache__/
+.pytest_cache/

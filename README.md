@@ -4,6 +4,8 @@ A local Noida furniture marketplace built with Next.js/React/TypeScript and Nest
 
 ## Documentation
 
+The [FastAPI migration plan](docs/MASTER_IMPLEMENTATION_PLAN.md) tracks the approved target architecture, phase gates, and verification. The local startup commands below run the legacy reference application during the migration.
+
 Start at [doc/README.md](doc/README.md). It indexes 8 phases, 20 flow plans and 109 step documents, architecture decisions, REA evidence and actual [verification results](doc/verification.md). Not all planned steps are implemented.
 
 ## Local startup

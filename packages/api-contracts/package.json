@@ -10,6 +10,9 @@
     ".": {
       "types": "./src/schema.d.ts"
     },
+    "./fastapi": {
+      "types": "./src/fastapi-schema.d.ts"
+    },
     "./client": "./src/client.ts"
   }
 }

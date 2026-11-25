@@ -1,0 +1,14 @@
+# Celery and transactional outbox
+
+The current worker polls PostgreSQL, leases eligible outbox events, and publishes `create-demo-order` to BullMQ `lyor-orders` using the event ID as the job ID. It retries up to five times with exponential backoff beginning at 1.5 seconds. The local mock records reservations and the demo external reference in PostgreSQL. Order and outbox status must remain recoverable after a process failure.
+
+The migration uses a distinct Celery queue. Keep durable claims and deduplication in PostgreSQL. Pass event IDs, resolve state on receipt, and process redelivery without duplicate reservations or external records. Confirm final state before acknowledging work. Reconcile unknown external outcomes by durable reference before retrying. Alert on stale leases, queue age, repeated failures, and unresolved reconciliations.
+
+During handover, stop the legacy dispatcher, drain active jobs, then reconcile waiting, active, delayed, retrying, and failed work with the outbox and order state. Retain evidence of terminal failures even if BullMQ has removed the job. Preserve due times and attempts for transferred work. Change ownership only after every item has a disposition. Use the same reconciliation before reversing ownership.
+
+## Phase 04 implementation
+
+- The [dispatcher](../../apps/api/app/workers/dispatch.py) claims up to 25 due rows with PostgreSQL row locks and skips competing claims. It commits a 60-second lease before publishing to `lyor-celery-orders`. The lease accompanies the event ID and fences superseded messages. A failed or uncertain publish leaves a recoverable lease.
+- The [consumer](../../apps/api/app/workers/process.py) locks the event and order. Stock, reservations, the mock external reference, the confirmation audit, and the completed outbox state commit in one transaction. A repeated delivery can confirm previously committed mock evidence without decrementing stock again. Inconsistent or unknown external evidence stops processing and requires manual review.
+- Celery uses late acknowledgements and prefetch of one. PostgreSQL owns retry state, rather than Redis countdown jobs. Business failures keep up to five attempts with delays of 1.5, 3, 6, and 12 seconds. An interrupted database transaction leaves the lease eligible for recovery after expiry. Both API runtimes reject replay when a row is flagged for manual review or has an unknown external reference.
+- The [read-only BullMQ report](../../scripts/reconcile-bullmq.mjs) pairs retained jobs with database events, decodes due time from the locked BullMQ delayed score, and proposes the later due time and higher attempt counter. Terminal failures remain available for audited review. A paused and stable report with zero blockers is review evidence. Dispatcher ownership still requires operator verification and approval.

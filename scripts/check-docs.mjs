@@ -7,7 +7,8 @@ function walk(dir) {
       : [resolve(dir, entry.name)],
   );
 }
-const docs = walk("doc").filter((file) => file.endsWith(".md"));
+const historical = walk("doc").filter((file) => file.endsWith(".md"));
+const docs = [...historical, ...walk("docs").filter((file) => file.endsWith(".md"))];
 const failures = [];
 for (const file of docs) {
   const text = readFileSync(file, "utf8");
@@ -21,7 +22,7 @@ for (const file of docs) {
       failures.push(file + ": broken link " + target);
   }
 }
-const steps = docs.filter((file) => /[\\/]steps[\\/]ST-\d+\.md$/.test(file));
+const steps = historical.filter((file) => /[\\/]steps[\\/]ST-\d+\.md$/.test(file));
 if (steps.length !== 109)
   failures.push("Expected 109 canonical step documents; found " + steps.length);
 if (failures.length) {

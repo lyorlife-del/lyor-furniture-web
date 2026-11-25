@@ -1,0 +1,33 @@
+{
+  "source": "fb7d266 apps/api/src/modules/pricing/domain.ts",
+  "fixtureSecret": "unit-test-only-secret-at-least-32-characters",
+  "quotePayload": {
+    "id": "baseline-quote",
+    "cartId": "baseline-cart",
+    "cartRevision": 1,
+    "ownerId": "customer-a",
+    "city": "noida",
+    "pin": "201304",
+    "lines": [
+      { "productId": "mira-sofa", "name": "Mira – ₹", "quantity": 1 }
+    ],
+    "breakdown": { "totalPaise": 129564, "depositPaise": 0 },
+    "policyVersion": "demo-noida-v1",
+    "expiresAt": "2026-11-25T12:00:00.000Z"
+  },
+  "expectedCanonicalQuote": "{\"breakdown\":{\"depositPaise\":0,\"totalPaise\":129564},\"cartId\":\"baseline-cart\",\"cartRevision\":1,\"city\":\"noida\",\"expiresAt\":\"2026-11-25T12:00:00.000Z\",\"id\":\"baseline-quote\",\"lines\":[{\"name\":\"Mira – ₹\",\"productId\":\"mira-sofa\",\"quantity\":1}],\"ownerId\":\"customer-a\",\"pin\":\"201304\",\"policyVersion\":\"demo-noida-v1\"}",
+  "expectedQuoteSignature": "7cc3fdf2cefa4672c70dc6b4b8f0b78325888157e0bce99a3c20ae3a50df99c5",
+  "orderRequest": {
+    "quoteId": "baseline-quote",
+    "signature": "7cc3fdf2cefa4672c70dc6b4b8f0b78325888157e0bce99a3c20ae3a50df99c5",
+    "address": {
+      "name": "Synthetic baseline",
+      "phone": "9999999999",
+      "street": "Example – only",
+      "pin": "201304"
+    },
+    "consent": true
+  },
+  "expectedCanonicalOrderRequest": "{\"address\":{\"name\":\"Synthetic baseline\",\"phone\":\"9999999999\",\"pin\":\"201304\",\"street\":\"Example – only\"},\"consent\":true,\"quoteId\":\"baseline-quote\",\"signature\":\"7cc3fdf2cefa4672c70dc6b4b8f0b78325888157e0bce99a3c20ae3a50df99c5\"}",
+  "expectedOrderRequestHash": "bd5881c3d0da566543de3321622ff3362e21dd9b8c833dab24f5cdd7c3c18aaf"
+}
