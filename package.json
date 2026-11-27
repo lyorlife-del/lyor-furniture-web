@@ -23,6 +23,7 @@
     "infra:down": "docker compose down",
     "worker": "npm run worker -w @lyor/api",
     "contracts": "npm run contracts -w @lyor/api && openapi-typescript packages/api-contracts/openapi.json -o packages/api-contracts/src/schema.d.ts",
+    "contracts:fastapi": "node scripts/fastapi-contracts.mjs",
     "setup:local": "node scripts/setup-local.mjs",
     "db:local": "node scripts/local-postgres.mjs",
     "test:db": "node scripts/test-database.mjs",

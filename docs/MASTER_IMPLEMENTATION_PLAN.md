@@ -16,3 +16,9 @@ Migrate the existing application in place. Preserve the approved UI, routes, pri
 Read the [phase index](implementation/backend-migration-plan.md), [decision register](DECISIONS.md), and [implementation history](DEVELOPMENT_CHANGELOG.md). Report test outcomes and stop for acceptance at the end of each phase.
 
 Use the [Odoo staging rollout](odoo/plan/implementation-plan.md) to complete the inventory and rental prerequisites for Phase 05.
+
+## Location and delivery workstream
+
+The [LOC implementation plan](implementation/location-serviceability-plan.md) tracks the separately gated PIN, current-location and delivery feature. LOC-00 through LOC-02 were accepted on local evidence on 2026-11-27. LOC-03 adds persistent preferences and PIN-aware catalogue and product availability. LOC-04 through LOC-06 await their respective gates. The live provider smoke and approved postal data remain pending.
+
+The user confirmed on 2026-11-27 that coverage includes all valid PIN codes in Delhi's entire NCT and Gurugram city (Gurgaon). The approved postal source and verified PIN list remain pending; derive the list from that policy after source approval. Existing Noida routes and Odoo preview remain synthetic/local pilot scope. Live stock, payment, identity, production migration and deployment retain their independent release dependencies and approvals.

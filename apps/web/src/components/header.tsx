@@ -1,34 +1,35 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  MapPin,
-  Search,
-  ShoppingBag,
-  UserRound,
-  X,
-  Menu,
-  CheckCircle2,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@lyor/ui";
 import { api, errorMessage } from "@/lib/api";
 import { useStore } from "./store-provider";
-export function Header() {
+import { HomeWishlist } from "./wishlist";
+import { HomeNavigation } from "./home-navigation";
+import { ManualLocationSelector } from "./manual-location-selector";
+export function Header({
+  databaseServiceability = false,
+  currentLocation = false,
+}: {
+  databaseServiceability?: boolean;
+  currentLocation?: boolean;
+}) {
   const { cart, cartState, pin, setPin, session, notify } = useStore(),
-    pathname = usePathname(),
-    router = useRouter();
+    pathname = usePathname();
   const [open, setOpen] = useState(false),
     [input, setInput] = useState(""),
     [result, setResult] = useState<{
       deliverable: boolean;
       message: string;
     } | null>(null),
-    [busy, setBusy] = useState(false),
-    [mobile, setMobile] = useState(false);
+    [busy, setBusy] = useState(false);
   const locationRequest = useRef<AbortController | null>(null);
+  const cartCount =
+    cart?.lines.reduce((sum, line) => sum + line.quantity, 0) ?? 0;
   useEffect(() => () => locationRequest.current?.abort(), []);
   function changeLocationOpen(next: boolean) {
     if (!next) {
@@ -70,151 +71,146 @@ export function Header() {
     }
   }
   return (
-    <>
-      <div className="announcement">
-        <span>Make room for a life you love.</span>
-        <Link href="/noida/rent">Explore furniture rentals</Link>
-        <span className="demo-tag">LOCAL DEMO · SAMPLE PRICES & STOCK</span>
+    <div className="editorial-header-shell">
+      <div className="editorial-announcement">
+        A little comfort, delivered. Explore furniture rentals in Noida.
       </div>
-      <header className="site-header">
-        <Link href="/" aria-label="LYOR home" className="brand">
-          <Image
-            src="/images/lyor-logo.svg"
-            alt="LYOR"
-            width={91}
-            height={36}
-            priority
-          />
-          <span>furniture</span>
+      <header className="editorial-header editorial-wrap">
+        <Link href="/" aria-label="LYOR home" className="editorial-brand">
+          <strong>LYOR</strong>
+          <span>Home, at your pace</span>
         </Link>
-        <Dialog.Root open={open} onOpenChange={changeLocationOpen}>
-          <Dialog.Trigger asChild>
-            <button className="location-button">
-              <MapPin size={18} />
-              <span>
-                <small>Delivery location</small>
-                <strong>Noida</strong>
-                <span className="location-pin">{pin}</span>
-              </span>
-            </button>
-          </Dialog.Trigger>
-          <Dialog.Portal>
-            <Dialog.Overlay className="dialog-overlay" />
-            <Dialog.Content className="dialog-content">
-              <Dialog.Title>Let’s find your neighbourhood.</Dialog.Title>
-              <Dialog.Description>
-                Check a PIN in our synthetic Noida delivery zone. This is demo
-                coverage, not a delivery promise.
-              </Dialog.Description>
-              <Dialog.Close
-                className="dialog-close"
-                aria-label="Close location selector"
-              >
-                <X size={20} />
-              </Dialog.Close>
-              <form onSubmit={check}>
-                <label htmlFor="delivery-pin">Delivery PIN</label>
-                <input
-                  id="delivery-pin"
-                  inputMode="numeric"
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                  placeholder="Try 201304"
-                  value={input}
-                  disabled={busy}
-                  onChange={(e) => {
-                    setInput(e.target.value);
-                    setResult(null);
-                  }}
-                  required
-                />
-                <Button disabled={busy} className="mt-4 w-full">
-                  {busy ? "Checking…" : "Check availability"}
-                </Button>
-              </form>
-              {result && !result.deliverable ? (
-                <div className="notice mt-4" role="alert">
-                  {result.message}
-                  <Link
-                    href="/business"
-                    onClick={() => changeLocationOpen(false)}
-                  >
-                    Send an enquiry
-                  </Link>
+        {databaseServiceability ? (
+          <ManualLocationSelector currentLocation={currentLocation} />
+        ) : (
+          <Dialog.Root open={open} onOpenChange={changeLocationOpen}>
+            <Dialog.Trigger asChild>
+              <button id="editorial-location" className="editorial-location">
+                <span>
+                  <small>Deliver to</small>
+                  <strong>Noida</strong>
+                  <span className="location-pin">{` · ${pin || "Enter pincode"}`}</span>
+                </span>
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="dialog-overlay" />
+              <Dialog.Content className="dialog-content">
+                <Dialog.Title>Delivery location</Dialog.Title>
+                <Dialog.Description>
+                  Check availability for your address in the Noida demo area.
+                </Dialog.Description>
+                <Dialog.Close
+                  className="dialog-close"
+                  aria-label="Close location selector"
+                >
+                  <X size={20} />
+                </Dialog.Close>
+                <div className="delivery-city">
+                  <small>City</small>
+                  <strong>Noida</strong>
                 </div>
-              ) : null}
-              <p className="small-note">
-                <CheckCircle2 size={16} /> Noida · demo city
-              </p>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
-        <nav
-          aria-label="Main navigation"
-          className={mobile ? "main-nav is-open" : "main-nav"}
+                <form onSubmit={check}>
+                  <label htmlFor="delivery-pin">Delivery PIN</label>
+                  <input
+                    id="delivery-pin"
+                    inputMode="numeric"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    placeholder="Try 201304"
+                    value={input}
+                    disabled={busy}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      setResult(null);
+                    }}
+                    required
+                  />
+                  <Button disabled={busy} className="mt-4 w-full">
+                    {busy ? "Checking…" : "Check availability"}
+                  </Button>
+                </form>
+                {result && !result.deliverable ? (
+                  <div className="notice mt-4" role="alert">
+                    {result.message}
+                    <Link
+                      href="/business"
+                      onClick={() => changeLocationOpen(false)}
+                    >
+                      Send an enquiry
+                    </Link>
+                  </div>
+                ) : null}
+                <p className="small-note">
+                  Availability is checked for your delivery PIN.
+                </p>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        )}
+        <form
+          action={pathname === "/noida/buy" ? "/noida/buy" : "/noida/rent"}
+          className="editorial-search"
+          role="search"
         >
-          {[
-            ["Rent", "/noida/rent"],
-            ["Buy", "/noida/buy"],
-            ["Bundles", "/bundles"],
-            ["For business", "/business"],
-          ].map(([label, href]) => (
-            <Link
-              key={href}
-              href={href}
-              className={pathname === href ? "active" : ""}
-              onClick={() => setMobile(false)}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-        <div className="header-actions">
-          <button
-            aria-label="Search furniture"
-            onClick={() => {
-              router.push("/noida/rent?focus=search");
-            }}
-          >
-            <Search size={21} />
+          <button type="submit" aria-label="Search furniture">
+            <Image
+              src="/images/home/nav-search.svg"
+              width={22}
+              height={22}
+              alt=""
+              unoptimized
+            />
           </button>
+          <input
+            name="q"
+            aria-label="Search furniture, appliances and more"
+            placeholder="Search furniture, appliances & more"
+          />
+        </form>
+        <div className="editorial-header-actions">
+          <HomeWishlist />
+          <Link
+            href="/cart"
+            className="editorial-header-icon"
+            aria-label={
+              cartState.status === "ready" ? `Cart, ${cartCount} items` : "Cart"
+            }
+          >
+            <span className="editorial-cart-image">
+              <Image
+                src="/images/home/nav-cart.svg"
+                width={22}
+                height={22}
+                alt=""
+                unoptimized
+              />
+              <small>{cartCount}</small>
+            </span>
+            <span>Cart</span>
+          </Link>
           {session ? (
             <AccountMenu key={session.id} name={session.name} />
           ) : (
-            <Link href="/account/orders" aria-label="Select demo identity">
-              <UserRound size={21} />
+            <Link
+              href="/account/orders"
+              className="editorial-account"
+              aria-label="Select demo identity"
+            >
+              <Image
+                src="/images/home/nav-user.svg"
+                width={22}
+                height={22}
+                alt=""
+                unoptimized
+              />
+              <span>Login / My Account</span>
             </Link>
           )}
-          <Link
-            href="/cart"
-            aria-label={
-              cartState.status !== "ready"
-                ? "Cart"
-                : "Cart, " +
-                  (cart?.lines.reduce((sum, line) => sum + line.quantity, 0) ??
-                    0) +
-                  " items"
-            }
-            className="cart-icon"
-          >
-            <ShoppingBag size={22} />
-            {cart?.lines.length ? (
-              <span>
-                {cart.lines.reduce((sum, line) => sum + line.quantity, 0)}
-              </span>
-            ) : null}
-          </Link>
-          <button
-            className="menu-toggle"
-            aria-label="Toggle navigation"
-            aria-expanded={mobile}
-            onClick={() => setMobile(!mobile)}
-          >
-            {mobile ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </header>
-    </>
+      <HomeNavigation key={pathname} showBuy={pathname !== "/"} />
+    </div>
   );
 }
 
@@ -235,8 +231,15 @@ function AccountMenu({ name }: { name: string }) {
   }
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className="account-trigger" aria-label="Your account">
-        <UserRound size={21} />
+      <Dialog.Trigger className="editorial-account" aria-label="Your account">
+        <Image
+          src="/images/home/nav-user.svg"
+          width={22}
+          height={22}
+          alt=""
+          unoptimized
+        />
+        <span>My Account</span>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />

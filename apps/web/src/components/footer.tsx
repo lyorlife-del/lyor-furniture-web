@@ -1,40 +1,71 @@
 import Link from "next/link";
+
+const footerLinks = [
+  [
+    "Explore",
+    [
+      ["Furniture", "/noida/rent"],
+      ["Appliances", "/noida/rent?category=appliances"],
+      ["Shop by room", "/#rooms"],
+      ["All rentals", "/noida/rent"],
+    ],
+  ],
+  [
+    "Rent with LYOR",
+    [
+      ["How it works", "/#how-renting-works"],
+      ["Room bundles", "/bundles"],
+      ["Your account", "/account/orders"],
+      ["Contact", "/business"],
+    ],
+  ],
+  [
+    "The details",
+    [
+      ["Shipping & returns", "/policies"],
+      ["Rental terms", "/policies"],
+      ["Privacy", "/policies"],
+      ["Business enquiries", "/business"],
+    ],
+  ],
+] as const;
+
 export function Footer() {
   return (
-    <footer className="footer">
-      <div>
-        <Link href="/" className="footer-brand">
-          LYOR<span>furniture</span>
-        </Link>
-        <p>
-          Thoughtful pieces.
-          <br />A home that feels like you.
-        </p>
-      </div>
-      <div>
-        <h3>Make yourself at home</h3>
-        <Link href="/noida/rent">Rent furniture</Link>
-        <Link href="/noida/buy">Buy furniture</Link>
-        <Link href="/bundles">Explore bundles</Link>
-      </div>
-      <div>
-        <h3>Here to help</h3>
-        <Link href="/business">Business enquiries</Link>
-        <Link href="/account/orders">Your demo orders</Link>
-        <Link href="/policies">Demo terms & policies</Link>
-      </div>
-      <div className="footer-note">
-        <h3>A work in progress, thoughtfully.</h3>
-        <p>
-          This local demo uses synthetic prices and availability. No payments
-          are collected and no real orders are placed.
-        </p>
-      </div>
-      <div className="footer-bottom">
-        <span>
-          © {new Date().getFullYear()} LYOR · Furniture marketplace demo
-        </span>
-        <Link href="/admin">Staff demo</Link>
+    <footer className="editorial-footer">
+      <div className="editorial-wrap">
+        <div className="editorial-footer-top">
+          <h2>Make room for living.</h2>
+          <Link href="/noida/rent" className="editorial-button">
+            Explore rentals <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+        <div className="editorial-footer-grid">
+          <div>
+            <Link href="/" className="editorial-footer-brand">
+              LYOR
+            </Link>
+            <p>
+              Furniture and everyday essentials, <br />
+              for wherever life takes you.
+            </p>
+          </div>
+          {footerLinks.map(([column, links]) => (
+            <div key={column}>
+              <h3>{column}</h3>
+              {links.map(([label, href]) => (
+                <Link key={label} href={href}>
+                  {label}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="editorial-footer-bottom">
+          <span>© {new Date().getFullYear()} LYOR</span>
+          <Link href="/admin">Staff demo</Link>
+          <span>Thoughtful pieces. Everyday comfort.</span>
+        </div>
       </div>
     </footer>
   );

@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import Depends, Header, Request
 from sqlalchemy import inspect
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings
@@ -18,7 +18,15 @@ VALIDATION = {400: {"model": ErrorResponse}}
 
 async def get_db(request: Request):
     async with request.app.state.sessions() as session:
-        yield session
+        try:
+            yield session
+        except SQLAlchemyError:
+            path = request.url.path
+            if (path == "/api/v1/location-preference" or path.startswith("/api/v1/serviceability/") or
+                ("deliveryPin" in request.query_params and (path == "/api/v1/catalog" or path.startswith("/api/v1/products/")))):
+                from app.services.serviceability import LocationError
+                raise LocationError("location_unavailable", "Location checks are temporarily unavailable. Please try again.") from None
+            raise
 
 
 Db = Annotated[AsyncSession, Depends(get_db)]

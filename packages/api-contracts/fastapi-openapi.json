@@ -171,6 +171,30 @@
         "title": "AdminProductResponse",
         "type": "object"
       },
+      "AvailabilityRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/LineDto"
+            },
+            "maxItems": 25,
+            "minItems": 1,
+            "title": "Lines",
+            "type": "array"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pincode",
+          "lines"
+        ],
+        "title": "AvailabilityRequest",
+        "type": "object"
+      },
       "BreakdownResponse": {
         "properties": {
           "currency": {
@@ -212,6 +236,34 @@
           "taxLabel"
         ],
         "title": "BreakdownResponse",
+        "type": "object"
+      },
+      "CartAvailability": {
+        "properties": {
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "unavailable": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Unavailable",
+            "type": "array"
+          }
+        },
+        "required": [
+          "unavailable",
+          "message"
+        ],
+        "title": "CartAvailability",
         "type": "object"
       },
       "CartDto": {
@@ -416,6 +468,24 @@
         "title": "CheckoutDto",
         "type": "object"
       },
+      "City": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "City",
+        "type": "object"
+      },
       "CityResponse": {
         "properties": {
           "demo": {
@@ -455,6 +525,69 @@
           "quantity"
         ],
         "title": "ComponentResponse",
+        "type": "object"
+      },
+      "Coordinates": {
+        "additionalProperties": false,
+        "properties": {
+          "accuracy": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accuracy"
+          },
+          "latitude": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "type": "number"
+          },
+          "longitude": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "type": "number"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "title": "Coordinates",
+        "type": "object"
+      },
+      "DeliveryZone": {
+        "properties": {
+          "city": {
+            "title": "City",
+            "type": "string"
+          },
+          "cityId": {
+            "title": "Cityid",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "cityId",
+          "city"
+        ],
+        "title": "DeliveryZone",
         "type": "object"
       },
       "EnquiryDto": {
@@ -959,6 +1092,225 @@
         "title": "OutboxResponse",
         "type": "object"
       },
+      "PinCheckError": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "error": {
+            "title": "Error",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "retryable": {
+            "title": "Retryable",
+            "type": "boolean"
+          },
+          "statusCode": {
+            "title": "Statuscode",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error",
+          "code",
+          "retryable"
+        ],
+        "title": "PinCheckError",
+        "type": "object"
+      },
+      "PinCheckResponse": {
+        "properties": {
+          "checkedAt": {
+            "format": "date-time",
+            "title": "Checkedat",
+            "type": "string"
+          },
+          "configurationVersion": {
+            "title": "Configurationversion",
+            "type": "integer"
+          },
+          "deliverable": {
+            "title": "Deliverable",
+            "type": "boolean"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "geography": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PinGeography"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          },
+          "reasonCode": {
+            "enum": [
+              "serviceable",
+              "unknown_pin",
+              "outside_coverage",
+              "zone_disabled",
+              "zone_paused",
+              "mapping_inactive",
+              "mapping_not_effective",
+              "ambiguous_zone"
+            ],
+            "title": "Reasoncode",
+            "type": "string"
+          },
+          "validity": {
+            "enum": [
+              "valid",
+              "unknown"
+            ],
+            "title": "Validity",
+            "type": "string"
+          },
+          "zone": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DeliveryZone"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "pincode",
+          "validity",
+          "geography",
+          "deliverable",
+          "zone",
+          "reasonCode",
+          "message",
+          "configurationVersion",
+          "checkedAt",
+          "demo"
+        ],
+        "title": "PinCheckResponse",
+        "type": "object"
+      },
+      "PinGeography": {
+        "properties": {
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "country": {
+            "const": "IN",
+            "default": "IN",
+            "title": "Country",
+            "type": "string"
+          },
+          "district": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "District"
+          },
+          "sourceVersion": {
+            "title": "Sourceversion",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "district",
+          "state",
+          "sourceVersion"
+        ],
+        "title": "PinGeography",
+        "type": "object"
+      },
+      "Preference": {
+        "properties": {
+          "confirmedAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmedat"
+          },
+          "revision": {
+            "default": 0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "selection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PinCheckResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "Preference",
+        "type": "object"
+      },
+      "PreferenceChange": {
+        "additionalProperties": false,
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0.0,
+            "title": "Expectedrevision",
+            "type": "integer"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pincode",
+          "expectedRevision"
+        ],
+        "title": "PreferenceChange",
+        "type": "object"
+      },
       "PricedLineResponse": {
         "additionalProperties": false,
         "properties": {
@@ -1275,6 +1627,33 @@
           }
         },
         "title": "ReadinessResponse",
+        "type": "object"
+      },
+      "ResolvedLocation": {
+        "properties": {
+          "provider": {
+            "enum": [
+              "mock",
+              "google"
+            ],
+            "title": "Provider",
+            "type": "string"
+          },
+          "resolutionStatus": {
+            "const": "approximate",
+            "title": "Resolutionstatus",
+            "type": "string"
+          },
+          "serviceability": {
+            "$ref": "#/components/schemas/PinCheckResponse"
+          }
+        },
+        "required": [
+          "provider",
+          "resolutionStatus",
+          "serviceability"
+        ],
+        "title": "ResolvedLocation",
         "type": "object"
       },
       "SavedCartResponse": {
@@ -1801,6 +2180,22 @@
         "parameters": [
           {
             "in": "query",
+            "name": "deliveryPin",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Deliverypin"
+            }
+          },
+          {
+            "in": "query",
             "name": "city",
             "required": false,
             "schema": {
@@ -2008,6 +2403,76 @@
         ]
       }
     },
+    "/api/v1/location-preference": {
+      "get": {
+        "operationId": "getLocationPreference",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preference"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Read Preference",
+        "tags": [
+          "Serviceability"
+        ]
+      },
+      "put": {
+        "operationId": "saveLocationPreference",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferenceChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Preference"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Save Preference",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
     "/api/v1/me/orders": {
       "get": {
         "operationId": "listMyOrders",
@@ -2164,6 +2629,22 @@
               "title": "Slug",
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "deliveryPin",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Deliverypin"
+            }
           }
         ],
         "responses": {
@@ -2287,6 +2768,226 @@
         "summary": "Serviceability",
         "tags": [
           "Catalog",
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability/cart-availability": {
+      "post": {
+        "operationId": "previewCartAvailability",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AvailabilityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartAvailability"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Cart Availability",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability/cities": {
+      "get": {
+        "operationId": "listDeliveryCities",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/City"
+                  },
+                  "title": "Response Listdeliverycities",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delivery Cities",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability/pincode": {
+      "get": {
+        "operationId": "missingDeliveryPincode",
+        "responses": {
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Missing Pin",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability/pincode/{pincode}": {
+      "get": {
+        "operationId": "checkDeliveryPincode",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pincode",
+            "required": true,
+            "schema": {
+              "title": "Pincode",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Pincode Check",
+        "tags": [
+          "Serviceability"
+        ]
+      }
+    },
+    "/api/v1/serviceability/resolve-location": {
+      "post": {
+        "operationId": "resolveDeliveryLocation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Coordinates"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolvedLocation"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCheckError"
+                }
+              }
+            },
+            "description": "Gateway Timeout"
+          }
+        },
+        "summary": "Resolve Location",
+        "tags": [
           "Serviceability"
         ]
       }

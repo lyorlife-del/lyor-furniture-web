@@ -1,13 +1,15 @@
 "use client";
 import { useMemo, useSyncExternalStore, useCallback } from "react";
 import type { Cart, Quote, Session } from "./types";
+import { browserStorage } from "./browser-storage";
 
+const quoteStorage = browserStorage("sessionStorage");
 const quoteKey = "lyor-quote-v1";
 const quoteEvent = "lyor-quote-change";
 
 export function storeQuote(quote: Quote | null) {
-  if (quote) sessionStorage.setItem(quoteKey, JSON.stringify(quote));
-  else sessionStorage.removeItem(quoteKey);
+  if (quote) quoteStorage.setItem(quoteKey, JSON.stringify(quote));
+  else quoteStorage.removeItem(quoteKey);
   window.dispatchEvent(new Event(quoteEvent));
 }
 
@@ -21,7 +23,7 @@ function subscribeQuote(callback: () => void) {
 }
 
 function snapshot() {
-  return sessionStorage.getItem(quoteKey);
+  return quoteStorage.getItem(quoteKey);
 }
 
 const serverQuote = () => null;

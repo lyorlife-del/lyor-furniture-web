@@ -39,6 +39,10 @@ def register_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def request_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+        if request.url.path == "/api/v1/serviceability/resolve-location":
+            return JSONResponse({"statusCode": 400, "error": "Bad Request", "code": "invalid_coordinates",
+                                 "retryable": False, "message": "Enter valid location coordinates."},
+                                status_code=400, headers={"Cache-Control": "no-store"})
         messages = []
         errors = exc.errors()
         if request.url.path.startswith("/api/v1/"):

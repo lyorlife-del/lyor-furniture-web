@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@lyor/ui";
@@ -13,6 +14,7 @@ export default function Checkout() {
   const { session, pin, cart, cartState, refreshCart } = useStore(),
     router = useRouter();
   const quote = useCurrentQuote(cart, session, pin);
+  const items = new Map(cart?.products.map((product) => [product.id, product]));
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const request = useRef<AbortController | null>(null);
@@ -62,6 +64,13 @@ export default function Checkout() {
       <div className="page-heading">
         <p className="eyebrow">YOUR NEXT CHAPTER</p>
         <h1>Let’s make it feel like home.</h1>
+        <ol className="checkout-stages" aria-label="Checkout progress">
+          <li>
+            <Link href="/cart">01 Rental details</Link>
+          </li>
+          <li aria-current="step">02 Delivery details</li>
+          <li>03 Demo order request</li>
+        </ol>
       </div>
       <div className="demo-callout">
         Use fictional contact details only. This stores a local demo order
@@ -89,7 +98,7 @@ export default function Checkout() {
       ) : (
         <div className="two-column">
           <form className="panel" onSubmit={submit}>
-            <h2>A place for your pieces.</h2>
+            <h2>Delivery to Noida</h2>
             <label htmlFor="name">Name · fictional demo details</label>
             <input
               id="name"
@@ -138,17 +147,38 @@ export default function Checkout() {
                 <Link href="/cart">Review cart and quote</Link>
               </p>
             ) : null}
-            <Button className="mt-5 w-full" disabled={busy}>
+            <Button variant="secondary" className="mt-5 w-full" disabled={busy}>
               {busy ? "Saving your request…" : "Submit demo order request"}
             </Button>
           </form>
-          <aside className="panel">
-            <h2>Your quote.</h2>
-            {quote.lines.map((line) => (
-              <p key={line.productId} className="small-note">
-                {line.name} × {line.quantity} · {line.mode}
-              </p>
-            ))}
+          <aside className="panel sticky-summary">
+            <h2>Rental summary</h2>
+            <ul className="checkout-items">
+              {quote.lines.map((line) => {
+                const image = items.get(line.productId)?.image;
+                return (
+                  <li
+                    className="checkout-item"
+                    key={line.productId + line.mode}
+                  >
+                    <span className="cart-photo">
+                      {image ? (
+                        <Image src={image} alt="" fill sizes="56px" />
+                      ) : null}
+                    </span>
+                    <span>
+                      <strong>{line.name}</strong>
+                      <span className="small-note">
+                        {line.quantity} ×{" "}
+                        {line.mode === "rent"
+                          ? `${line.tenure} month rental`
+                          : "purchase"}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
             <div className="mt-6">
               <PriceSummary breakdown={quote.breakdown} />
             </div>

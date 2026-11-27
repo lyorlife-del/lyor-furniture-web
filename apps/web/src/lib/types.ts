@@ -24,7 +24,15 @@ export function money(paise: number) {
     maximumFractionDigits: paise % 100 ? 2 : 0,
   }).format(paise / 100);
 }
-export function rentalPrice(product: Product, tenure: number) {
+export const rentalTenures = [3, 6, 12] as const;
+export type RentalTenure = (typeof rentalTenures)[number];
+export function rentalTenure(value: unknown): RentalTenure {
+  return value === "3" ? 3 : value === "12" ? 12 : 6;
+}
+export function rentalPrice(
+  product: Pick<Product, "monthlyPaise">,
+  tenure: number,
+) {
   return Math.round(
     (product.monthlyPaise * ({ 3: 110, 6: 100, 12: 90 }[tenure] ?? 100)) / 100,
   );

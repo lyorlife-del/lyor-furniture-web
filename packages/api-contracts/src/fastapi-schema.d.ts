@@ -208,6 +208,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/location-preference": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Preference */
+        get: operations["getLocationPreference"];
+        /** Save Preference */
+        put: operations["saveLocationPreference"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/orders": {
         parameters: {
             query?: never;
@@ -310,6 +328,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/serviceability/cart-availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cart Availability */
+        post: operations["previewCartAvailability"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/serviceability/cities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Delivery Cities */
+        get: operations["listDeliveryCities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/serviceability/pincode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Missing Pin */
+        get: operations["missingDeliveryPincode"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/serviceability/pincode/{pincode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pincode Check */
+        get: operations["checkDeliveryPincode"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/serviceability/resolve-location": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve Location */
+        post: operations["resolveDeliveryLocation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -374,6 +477,13 @@ export interface components {
             /** Variants */
             variants: components["schemas"]["VariantResponse"][];
         };
+        /** AvailabilityRequest */
+        AvailabilityRequest: {
+            /** Lines */
+            lines: components["schemas"]["LineDto"][];
+            /** Pincode */
+            pincode: string;
+        };
         /** BreakdownResponse */
         BreakdownResponse: {
             /** Currency */
@@ -390,6 +500,13 @@ export interface components {
             taxLabel: string;
             /** Totalpaise */
             totalPaise: number;
+        };
+        /** CartAvailability */
+        CartAvailability: {
+            /** Message */
+            message: string | null;
+            /** Unavailable */
+            unavailable: string[];
         };
         /** CartDto */
         CartDto: {
@@ -462,6 +579,13 @@ export interface components {
             /** Signature */
             signature: string;
         };
+        /** City */
+        City: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+        };
         /** CityResponse */
         CityResponse: {
             /** Demo */
@@ -477,6 +601,26 @@ export interface components {
             productId: string;
             /** Quantity */
             quantity: number;
+        };
+        /** Coordinates */
+        Coordinates: {
+            /** Accuracy */
+            accuracy?: number | null;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+        };
+        /** DeliveryZone */
+        DeliveryZone: {
+            /** City */
+            city: string;
+            /** Cityid */
+            cityId: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
         };
         /** EnquiryDto */
         EnquiryDto: {
@@ -657,6 +801,84 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** PinCheckError */
+        PinCheckError: {
+            /** Code */
+            code: string;
+            /** Error */
+            error: string;
+            /** Message */
+            message: string;
+            /** Retryable */
+            retryable: boolean;
+            /** Statuscode */
+            statusCode: number;
+        };
+        /** PinCheckResponse */
+        PinCheckResponse: {
+            /**
+             * Checkedat
+             * Format: date-time
+             */
+            checkedAt: string;
+            /** Configurationversion */
+            configurationVersion: number;
+            /** Deliverable */
+            deliverable: boolean;
+            /** Demo */
+            demo: boolean;
+            geography: components["schemas"]["PinGeography"] | null;
+            /** Message */
+            message: string;
+            /** Pincode */
+            pincode: string;
+            /**
+             * Reasoncode
+             * @enum {string}
+             */
+            reasonCode: "serviceable" | "unknown_pin" | "outside_coverage" | "zone_disabled" | "zone_paused" | "mapping_inactive" | "mapping_not_effective" | "ambiguous_zone";
+            /**
+             * Validity
+             * @enum {string}
+             */
+            validity: "valid" | "unknown";
+            zone: components["schemas"]["DeliveryZone"] | null;
+        };
+        /** PinGeography */
+        PinGeography: {
+            /** City */
+            city: string | null;
+            /**
+             * Country
+             * @default IN
+             * @constant
+             */
+            country: "IN";
+            /** District */
+            district: string | null;
+            /** Sourceversion */
+            sourceVersion: string;
+            /** State */
+            state: string;
+        };
+        /** Preference */
+        Preference: {
+            /** Confirmedat */
+            confirmedAt?: string | null;
+            /**
+             * Revision
+             * @default 0
+             */
+            revision: number;
+            selection?: components["schemas"]["PinCheckResponse"] | null;
+        };
+        /** PreferenceChange */
+        PreferenceChange: {
+            /** Expectedrevision */
+            expectedRevision: number;
+            /** Pincode */
+            pincode: string;
+        };
         /** PricedLineResponse */
         PricedLineResponse: {
             /** Depositpaise */
@@ -775,6 +997,20 @@ export interface components {
              * @constant
              */
             status: "ready";
+        };
+        /** ResolvedLocation */
+        ResolvedLocation: {
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "mock" | "google";
+            /**
+             * Resolutionstatus
+             * @constant
+             */
+            resolutionStatus: "approximate";
+            serviceability: components["schemas"]["PinCheckResponse"];
         };
         /** SavedCartResponse */
         SavedCartResponse: {
@@ -1083,6 +1319,7 @@ export interface operations {
     listCatalog: {
         parameters: {
             query?: {
+                deliveryPin?: string | null;
                 city?: "noida";
                 mode?: ("rent" | "buy") | null;
                 category?: ("living" | "bedroom" | "study" | "dining" | "storage" | "appliances" | "accessories" | "bundles") | null;
@@ -1176,6 +1413,68 @@ export interface operations {
             };
             /** @description Database unavailable */
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getLocationPreference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Preference"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    saveLocationPreference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferenceChange"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Preference"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1282,7 +1581,9 @@ export interface operations {
     };
     getProduct: {
         parameters: {
-            query?: never;
+            query?: {
+                deliveryPin?: string | null;
+            };
             header?: never;
             path: {
                 slug: string;
@@ -1371,6 +1672,188 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    previewCartAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvailabilityRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CartAvailability"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    listDeliveryCities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["City"][];
+                };
+            };
+        };
+    };
+    missingDeliveryPincode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+        };
+    };
+    checkDeliveryPincode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pincode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+        };
+    };
+    resolveDeliveryLocation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Coordinates"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResolvedLocation"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
+                };
+            };
+            /** @description Gateway Timeout */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PinCheckError"];
                 };
             };
         };

@@ -9,6 +9,7 @@ from sqlalchemy.pool import NullPool
 from app.core.config import load_settings
 from app.db.local import local_fixture_url
 from app.db.models import Base
+from app.db.serviceability import metadata as location_metadata
 from app.db.schema import schema_snapshot
 
 BASELINE = "0001_legacy"
@@ -60,7 +61,7 @@ try:
     with engine.connect() as connection:
         context.configure(
             connection=connection,
-            target_metadata=Base.metadata,
+            target_metadata=[Base.metadata, location_metadata],
             include_object=include_object,
             compare_server_default=True,
             on_version_apply=verify_baseline_stamp,

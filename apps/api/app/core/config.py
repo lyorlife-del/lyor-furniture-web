@@ -13,6 +13,14 @@ class Settings(BaseSettings):
     demo_mode: bool = False
     database_url: SecretStr
     quote_secret: SecretStr = Field(min_length=32)
+    serviceability_mode: Literal["disabled", "demo", "reference"] = "disabled"
+    serviceability_company_id: str = Field(default="lyor-demo", min_length=1, max_length=80)
+    geocoding_provider: Literal["disabled", "mock", "google"] = "disabled"
+    geocoding_live_enabled: bool = False
+    google_geocoding_api_key: SecretStr | None = None
+    geocoding_redis_url: SecretStr | None = None
+    geocoding_daily_limit: int = Field(default=100, ge=1)
+    geocoding_minute_limit: int = Field(default=5, ge=1)
 
     @field_validator("database_url")
     @classmethod

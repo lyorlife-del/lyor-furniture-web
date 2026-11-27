@@ -1,14 +1,16 @@
 import re
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, HTTPException, Query, Request, Response
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 from sqlalchemy import func, or_, select
 
 from app.db.models import Product
 
-from .common import DEMO_PINS, VALIDATION, Db, public_listing, record
+from .common import AppSettings, DEMO_PINS, VALIDATION, Db, public_listing, record
+from .location import catalogue_city
+from .pricing import listing_available
 from .contracts import CatalogQuery, CatalogResponse, CityResponse, ProductResponse, ServiceabilityResponse
 
 router = APIRouter(tags=["Catalog"])
@@ -22,8 +24,26 @@ def public_product(product: Product) -> dict:
     return {**data, "available": product.stock > 0, "demo": True}
 
 
-async def list_products(query: CatalogQuery, db: Db) -> dict:
-    conditions = public_listing(query.city)
+async def scoped_products(db, products, city):
+    ids = {part["productId"] for item in products for part in item.components}
+    parts = {p.id: p for p in await db.scalars(select(Product).where(Product.id.in_(ids), *public_listing(city)))} if ids else {}
+    rows = []
+    for item in products:
+        row = public_product(item)
+        row["available"] = bool(city and listing_available(item, city) and item.stock > 0 and all(
+            (part := parts.get(required["productId"])) and not part.components and part.stock >= required["quantity"]
+            for required in item.components
+        ))
+        rows.append(row)
+    return rows
+
+
+async def list_products(query: CatalogQuery, db: Db, settings: AppSettings = None) -> dict:
+    contextual = query.deliveryPin is not None
+    city = await catalogue_city(db, query.deliveryPin, settings) if contextual else query.city
+    conditions = public_listing(city)
+    if contextual and city is None:
+        conditions.append(False)
     if query.mode == "buy":
         conditions.append(Product.purchase_paise > 0)
     if query.category:
@@ -47,8 +67,9 @@ async def list_products(query: CatalogQuery, db: Db) -> dict:
         .offset((query.page - 1) * PAGE_SIZE)
         .limit(PAGE_SIZE)
     )
+    items = products.all()
     return {
-        "items": [public_product(product) for product in products],
+        "items": await scoped_products(db, items, city) if contextual else [public_product(product) for product in items],
         "total": total,
         "page": query.page,
         "pageSize": PAGE_SIZE,
@@ -57,7 +78,7 @@ async def list_products(query: CatalogQuery, db: Db) -> dict:
 
 
 @router.get("/catalog", operation_id="listCatalog", response_model=CatalogResponse, responses=VALIDATION)
-async def catalog(query: Annotated[CatalogQuery, Query()], db: Db, request: Request):
+async def catalog(query: Annotated[CatalogQuery, Query()], db: Db, request: Request, response: Response, settings: AppSettings):
     params = request.query_params
     repeats = {key: params.getlist(key) for key in params if len(params.getlist(key)) > 1}
     if repeats:
@@ -67,14 +88,22 @@ async def catalog(query: Annotated[CatalogQuery, Query()], db: Db, request: Requ
             raise RequestValidationError([
                 {**item, "loc": ("query", *item["loc"])} for item in error.errors()
             ]) from None
-    return await list_products(query, db)
+    if query.deliveryPin is not None:
+        response.headers["Cache-Control"] = "no-store"
+    return await list_products(query, db, settings)
 
 
 @router.get("/products/{slug}", operation_id="getProduct", response_model=ProductResponse)
-async def product(slug: str, db: Db):
+async def product(slug: str, db: Db, request: Request, response: Response, settings: AppSettings, deliveryPin: str | None = None):
     product = await db.scalar(select(Product).where(Product.slug == slug, *public_listing()))
     if product is None:
         raise HTTPException(404, "This listing is unavailable")
+    if deliveryPin is not None:
+        if len(request.query_params.getlist("deliveryPin")) != 1:
+            raise HTTPException(400, "Supply one delivery PIN")
+        response.headers["Cache-Control"] = "no-store"
+        city = await catalogue_city(db, deliveryPin, settings)
+        return (await scoped_products(db, [product], city))[0]
     return public_product(product)
 
 

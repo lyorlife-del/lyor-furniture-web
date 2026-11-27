@@ -17,5 +17,7 @@ The approved target is a Python 3.12 FastAPI modular monolith with Uvicorn, Pyda
 | [Celery design](architecture/celery-worker-design.md) | Dispatch, processing, and queue reconciliation |
 | [GCP deployment](architecture/gcp-deployment.md) | Service topology, verification, and rollback |
 | [Odoo 19 architecture and rollout](odoo/README.md) | Catalogue, inventory, rental pricing, and fulfilment boundaries |
+| [Storefront design system](architecture/storefront-design-system.md) | Figma sources, shared tokens, route coverage and API dependencies |
+| [Location and serviceability design](architecture/location-serviceability-hld.md) | LOC audit, postal/zone authority, provider and capacity boundaries, independently gated rollout |
 
 The [historical architecture](../doc/architecture.md) describes the current legacy implementation. The [master plan](MASTER_IMPLEMENTATION_PLAN.md) records approved changes and evidence.

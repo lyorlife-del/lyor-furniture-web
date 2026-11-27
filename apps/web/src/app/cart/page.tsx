@@ -8,13 +8,21 @@ import { useStore } from "@/components/store-provider";
 import { PriceSummary } from "@/components/price-summary";
 import { IdentityPicker } from "@/components/identity-picker";
 import { storeQuote, useCurrentQuote } from "@/lib/hooks";
-import { errorMessage } from "@/lib/api";
-import { money } from "@/lib/types";
+import { api, errorMessage } from "@/lib/api";
+import { DeliveryLocationButton } from "@/components/delivery-location-button";
+import {
+  money,
+  rentalPrice,
+  rentalTenure,
+  rentalTenures,
+  type Line,
+} from "@/lib/types";
 export default function CartPage() {
   const {
     cart,
     cartState,
     pin,
+    cataloguePin,
     refreshCart,
     saveLines,
     session,
@@ -25,6 +33,20 @@ export default function CartPage() {
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const quoteRequest = useRef<AbortController | null>(null);
+  const [warning, setWarning] = useState<{ pin: string; cart: typeof cart; message: string } | null>(null);
+  useEffect(() => {
+    if (!cataloguePin || !cart?.lines.length) return;
+    const controller = new AbortController();
+    api<{ unavailable: string[]; message: string | null }>("serviceability/cart-availability", {
+      method: "POST", body: JSON.stringify({ pincode: cataloguePin, lines: cart.lines }), signal: controller.signal,
+    }).then(result => {
+      const names = cart.products.filter(p => result.unavailable.includes(p.id)).map(p => p.name);
+      if (!controller.signal.aborted) setWarning({ pin: cataloguePin, cart, message: [result.message, names.join(", ")].filter(Boolean).join(" ") });
+    }).catch(() => {
+      if (!controller.signal.aborted) setWarning({ pin: cataloguePin, cart, message: "Availability could not be checked for this PIN." });
+    });
+    return () => controller.abort();
+  }, [cart, cataloguePin]);
   const validQuote = useCurrentQuote(cart, session, pin);
   const products = new Map(
     cart?.products?.map((product) => [product.id, product]),
@@ -32,14 +54,21 @@ export default function CartPage() {
   useEffect(() => {
     return () => quoteRequest.current?.abort();
   }, []);
-  async function change(index: number, quantity: number) {
+  async function change(
+    index: number,
+    update: Partial<Pick<Line, "quantity" | "tenure">>,
+  ) {
     if (!cart) return;
     setBusy(true);
     setError("");
     try {
       await saveLines(
         cart.lines.flatMap((line, i) =>
-          i !== index ? [line] : quantity ? [{ ...line, quantity }] : [],
+          i !== index
+            ? [line]
+            : update.quantity === 0
+              ? []
+              : [{ ...line, ...update }],
         ),
       );
       notify("Cart updated. Request a fresh quote.");
@@ -98,7 +127,10 @@ export default function CartPage() {
         </div>
       ) : (
         <div className="two-column">
-          <div>
+          <div className="panel cart-lines">
+            {warning && warning.cart === cart && warning.pin === cataloguePin && warning.message && (
+              <div className="notice" role="status">{warning.message} Your items are saved. <DeliveryLocationButton /></div>
+            )}
             {cart.lines.map((line, index) => {
               const product = products.get(line.productId);
               return (
@@ -116,7 +148,10 @@ export default function CartPage() {
                             "/noida/product/" +
                             product.slug +
                             "?mode=" +
-                            line.mode
+                            line.mode +
+                            (line.mode === "rent"
+                              ? "&tenure=" + line.tenure
+                              : "")
                           }
                         >
                           {product.name}
@@ -135,18 +170,43 @@ export default function CartPage() {
                       <p>
                         {money(
                           line.mode === "rent"
-                            ? product.monthlyPaise
+                            ? product.id.startsWith("pilot-")
+                              ? product.monthlyPaise
+                              : rentalPrice(product, line.tenure)
                             : product.purchasePaise,
                         )}{" "}
-                        · indicative
+                        {line.mode === "rent" ? " / month" : ""} · indicative
                       </p>
                     ) : (
                       <p>Listing unavailable. Remove it or try again.</p>
                     )}
+                    {line.mode === "rent" ? (
+                      <div className="cart-tenure">
+                        <label htmlFor={`cart-tenure-${index}`}>
+                          Rental tenure
+                        </label>
+                        <select
+                          id={`cart-tenure-${index}`}
+                          value={line.tenure}
+                          disabled={busy}
+                          onChange={(event) =>
+                            void change(index, {
+                              tenure: rentalTenure(event.target.value),
+                            })
+                          }
+                        >
+                          {rentalTenures.map((months) => (
+                            <option value={months} key={months}>
+                              {months} months
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : null}
                     <button
                       className="remove-button"
                       disabled={busy}
-                      onClick={() => change(index, 0)}
+                      onClick={() => change(index, { quantity: 0 })}
                     >
                       Remove item
                     </button>
@@ -156,7 +216,9 @@ export default function CartPage() {
                       <button
                         aria-label={"Decrease " + line.productId + " quantity"}
                         disabled={busy}
-                        onClick={() => change(index, line.quantity - 1)}
+                        onClick={() =>
+                          change(index, { quantity: line.quantity - 1 })
+                        }
                       >
                         <Minus size={14} />
                       </button>
@@ -164,7 +226,9 @@ export default function CartPage() {
                       <button
                         aria-label={"Increase " + line.productId + " quantity"}
                         disabled={busy || line.quantity >= 10}
-                        onClick={() => change(index, line.quantity + 1)}
+                        onClick={() =>
+                          change(index, { quantity: line.quantity + 1 })
+                        }
                       >
                         <Plus size={14} />
                       </button>
@@ -182,7 +246,7 @@ export default function CartPage() {
               </div>
             ) : null}
           </div>
-          <aside className="panel">
+          <aside className="panel sticky-summary">
             <h2>The complete picture.</h2>
             <form onSubmit={submitQuote}>
               <label htmlFor="cart-pin">Delivery PIN</label>

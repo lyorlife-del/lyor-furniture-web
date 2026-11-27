@@ -7,14 +7,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 const variants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-600 disabled:cursor-not-allowed disabled:opacity-50",
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-[#df1f3d] text-white hover:bg-[#bb1430]",
-        secondary: "bg-[#f4f2ef] text-[#252824] hover:bg-[#e8e5e1]",
+        default:
+          "bg-[var(--editorial-red,#a93632)] text-white hover:bg-[var(--lyor-brand-hover,#8f2d2b)]",
+        secondary:
+          "bg-[var(--lyor-action,#5b6248)] text-white hover:bg-[var(--editorial-green,#32392c)]",
         outline:
-          "border border-[#d8d8d2] bg-white text-[#252824] hover:bg-[#f7f7f3]",
+          "border border-[var(--editorial-line,#dedace)] bg-[var(--lyor-surface,#fffdfa)] text-[var(--editorial-ink,#3d3a30)] hover:bg-[var(--editorial-soft,#efeee4)]",
       },
     },
     defaultVariants: { variant: "default" },

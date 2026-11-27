@@ -26,10 +26,10 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
     );
   return data as T;
 }
-export async function serverApi<T>(path: string): Promise<T> {
+export async function serverApi<T>(path: string, headers?: Record<string, string>): Promise<T> {
   const response = await fetch(
     (process.env.API_URL ?? "http://127.0.0.1:4000/api/v1") + "/" + path,
-    { cache: "no-store", signal: AbortSignal.timeout(5000) },
+    { cache: "no-store", signal: AbortSignal.timeout(5000), headers },
   );
   if (!response.ok)
     throw new ApiError(

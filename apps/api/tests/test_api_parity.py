@@ -21,7 +21,7 @@ def test_openapi_contains_every_legacy_operation_and_success_status():
         (ROOT / "packages/api-contracts/openapi.json").read_text(encoding="utf-8")
     )
     candidate = create_app().openapi()
-    assert legacy["paths"].keys() == candidate["paths"].keys()
+    assert legacy["paths"].keys() <= candidate["paths"].keys()
     for path, operations in legacy["paths"].items():
         assert operations.keys() == candidate["paths"][path].keys()
         for method, before in operations.items():

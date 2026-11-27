@@ -5,7 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-from app.api.v1 import cart, catalog, enquiries, orders, pricing, staff
+from app.api.v1 import cart, catalog, enquiries, location, orders, pricing, serviceability, staff
+from app.services.serviceability import LocationError
 from app.api.v1.health import router as health_router
 from app.core.config import Settings, load_settings
 from app.core.errors import register_error_handlers
@@ -45,8 +46,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.add_middleware(LegacyHttpLimits)
     register_error_handlers(app)
+    @app.exception_handler(LocationError)
+    async def location_error(request, exc):
+        return serviceability.failure(exc)
     for router in (health_router, catalog.router, cart.router, pricing.router,
-                   orders.router, enquiries.router, staff.router):
+                   orders.router, enquiries.router, staff.router, serviceability.router, location.router):
         app.include_router(router, prefix="/api/v1")
     document_legacy_contract(app)
     return app

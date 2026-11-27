@@ -106,6 +106,7 @@ class PublishDto(Input):
 
 
 class CatalogQuery(Input):
+    deliveryPin: str | None = None
     city: Literal["noida"] = "noida"
     mode: Mode | None = None
     category: Category | None = None

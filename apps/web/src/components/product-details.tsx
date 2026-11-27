@@ -7,18 +7,30 @@ import { Button } from "@lyor/ui";
 import { money, rentalPrice, type Product } from "@/lib/types";
 import { errorMessage } from "@/lib/api";
 import { useStore } from "./store-provider";
+import { WishlistButton } from "./wishlist";
+import { DeliveryLocationButton } from "./delivery-location-button";
 export function ProductDetails({
   product,
   initialMode,
+  initialTenure = 6,
+  selectedPin = "",
 }: {
   product: Product;
   initialMode: "rent" | "buy";
+  initialTenure?: 3 | 6 | 12;
+  selectedPin?: string;
 }) {
-  const { cart, cartState, saveLines, notify, refreshCart } = useStore();
+  const { cart, cartState, saveLines, notify, refreshCart, catalogueLocation, cataloguePin } = useStore();
+  const refreshing = catalogueLocation && cataloguePin !== selectedPin;
   const pilot = product.id.startsWith("pilot-");
   const canBuy = product.purchasePaise > 0;
+  const photos = [
+    ...new Set([product.image, ...product.images].filter(Boolean)),
+  ];
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const photo = photos[photoIndex];
   const [mode, setMode] = useState(canBuy ? initialMode : "rent"),
-    [tenure, setTenure] = useState<3 | 6 | 12>(6),
+    [tenure, setTenure] = useState(initialTenure),
     [quantity, setQuantity] = useState(1),
     [variant, setVariant] = useState(product.variants[0]?.id ?? "standard"),
     [busy, setBusy] = useState(false),
@@ -64,9 +76,9 @@ export function ProductDetails({
       <div className="product-detail">
         <div>
           <div className="detail-photo">
-            {product.image ? (
+            {photo ? (
               <Image
-                src={product.image}
+                src={photo}
                 alt={product.name}
                 fill
                 priority
@@ -78,11 +90,37 @@ export function ProductDetails({
               </span>
             )}
           </div>
-          {product.image ? (
+          {photos.length > 1 ? (
+            <div
+              className="detail-thumbs"
+              role="group"
+              aria-label="Product photos"
+            >
+              {photos.map((image, index) => (
+                <button
+                  type="button"
+                  key={image}
+                  aria-pressed={index === photoIndex}
+                  aria-label={`Show product photo ${index + 1}`}
+                  onClick={() => setPhotoIndex(index)}
+                >
+                  <Image src={image} alt="" fill sizes="76px" />
+                </button>
+              ))}
+            </div>
+          ) : null}
+          {photo ? (
             <p className="small-note">
               Reference photography · Product details are synthetic demo data
             </p>
           ) : null}
+          <div className="detail-editorial-note">
+            <h2>Make room for your everyday.</h2>
+            <p>
+              Choose your finish and rental term, then check your delivery area
+              before requesting a quote.
+            </p>
+          </div>
         </div>
         <div className="detail-content">
           <p className="eyebrow">
@@ -93,7 +131,9 @@ export function ProductDetails({
           <h1>{product.name}</h1>
           <p className="description">{product.description}</p>
           <p className="stock-label">
-            {product.available
+            {refreshing ? "Checking availability for your PIN…" : selectedPin ? (
+              product.available ? "Available in the demo catalogue for " + selectedPin : "Unavailable for PIN " + selectedPin
+            ) : product.available
               ? "Available in the demo catalog"
               : pilot
                 ? "Availability pending"
@@ -121,16 +161,24 @@ export function ProductDetails({
               </button>
             </div>
           ) : null}
-          <p className="detail-price">
-            {money(
-              mode === "rent"
-                ? pilot
-                  ? product.monthlyPaise
-                  : rentalPrice(product, tenure)
-                : product.purchasePaise,
-            )}
-            {mode === "rent" ? <small> / month</small> : null}
-          </p>
+          <div className="detail-price-card">
+            <p className="detail-price">
+              {money(
+                mode === "rent"
+                  ? pilot
+                    ? product.monthlyPaise
+                    : rentalPrice({ monthlyPaise: product.monthlyPaise + (product.variants.find(v => v.id === variant)?.monthlyDeltaPaise ?? 0) }, tenure)
+                  : product.purchasePaise,
+              )}
+              {mode === "rent" ? <small> / month</small> : null}
+            </p>
+          </div>
+          {mode === "rent" ? (
+            <div className="detail-deposit">
+              <span>Indicative refundable deposit</span>
+              <strong>{money(product.depositPaise)}</strong>
+            </div>
+          ) : null}
           <p className="product-meta">
             {pilot
               ? "Pilot monthly rate before GST and logistics."
@@ -191,22 +239,32 @@ export function ProductDetails({
                   </select>
                 </>
               ) : null}
-              <Button
-                className="mt-6 w-full"
-                disabled={
-                  busy || !product.available || cartState.status !== "ready"
-                }
-                onClick={add}
-              >
-                <ShoppingBag size={18} />
-                {busy
-                  ? "Adding…"
-                  : !product.available
-                    ? "Currently unavailable"
-                    : cartState.status === "loading"
-                      ? "Loading cart…"
-                      : "Add to your space"}
-              </Button>
+              <div className="detail-location">
+                <span>Check delivery availability</span>
+                <DeliveryLocationButton className="catalog-delivery" />
+              </div>
+              <div className="detail-actions">
+                <Button
+                  className="w-full"
+                  disabled={
+                    busy || refreshing || !product.available || cartState.status !== "ready"
+                  }
+                  onClick={add}
+                >
+                  <ShoppingBag size={18} />
+                  {busy
+                    ? "Adding…"
+                    : !product.available
+                      ? "Currently unavailable"
+                      : cartState.status === "loading"
+                        ? "Loading cart…"
+                        : "Add to your space"}
+                </Button>
+                <WishlistButton
+                  href={`/noida/product/${product.slug}?mode=${mode}`}
+                  name={product.name}
+                />
+              </div>
               {product.available && cartState.status === "error" ? (
                 <div className="mt-4">
                   <p role="alert">{cartState.message}</p>
@@ -226,7 +284,7 @@ export function ProductDetails({
               <p className="small-note">
                 <CheckCircle2 size={16} /> Demo only · no payment collected
               </p>
-              <div className="mt-6">
+              <div className="detail-specs">
                 {product.components.length ? (
                   <details open>
                     <summary>What’s included</summary>
@@ -251,13 +309,14 @@ export function ProductDetails({
                 ) : null}
                 <details open>
                   <summary>Details & dimensions</summary>
-                  <p>
-                    {product.material}
-                    <br />
-                    {product.dimensions}
-                    <br />
-                    Finish: {product.color}
-                  </p>
+                  <dl>
+                    <dt>Material</dt>
+                    <dd>{product.material || "Pending"}</dd>
+                    <dt>Dimensions</dt>
+                    <dd>{product.dimensions || "Pending"}</dd>
+                    <dt>Finish</dt>
+                    <dd>{product.color || "Pending"}</dd>
+                  </dl>
                 </details>
                 <details>
                   <summary>Delivery, care & returns</summary>

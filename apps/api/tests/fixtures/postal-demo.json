@@ -1,0 +1,23 @@
+{
+  "companyId": "lyor-demo",
+  "reference": {
+    "id": "synthetic-postal-v1",
+    "source": "DEMO-001 fictional test reference; not India Post data",
+    "license": "Repository synthetic fixtures only",
+    "verifiedAt": "2026-01-01T00:00:00Z",
+    "validUntil": "2099-01-01T00:00:00Z",
+    "complete": true,
+    "synthetic": true
+  },
+  "postalCodes": [
+    {"pincode": "122002", "city": "Gurugram", "district": "Demo district", "state": "Haryana", "country": "IN", "active": true, "areas": [{"id": "demo-gurugram", "scope": "gurugram-city", "evidence": "DEMO-001 synthetic membership, not verified live geography"}]},
+    {"pincode": "110024", "city": "Delhi", "district": "Demo district", "state": "Delhi", "country": "IN", "active": true, "areas": [{"id": "demo-delhi", "scope": "delhi-nct", "evidence": "Synthetic covered/no-slot scenario; no capacity exists in LOC-01"}]},
+    {"pincode": "400001", "city": "Mumbai", "district": "Demo district", "state": "Maharashtra", "country": "IN", "active": true, "areas": [{"id": "demo-outside", "scope": "outside", "evidence": "Synthetic outside-coverage scenario"}]},
+    {"pincode": "201304", "city": "Noida", "district": "Demo district", "state": "Uttar Pradesh", "country": "IN", "active": true, "areas": [{"id": "demo-noida", "scope": "demo-noida", "evidence": "Existing local demo continuity only"}]}
+  ],
+  "zones": [
+    {"id": "DEMO-001", "cityId": "gurugram", "city": "Gurugram", "name": "DEMO-001 Gurugram", "scope": "gurugram-city", "active": true, "status": "open", "effectiveFrom": "2026-01-01T00:00:00Z", "pincodes": ["122002"]},
+    {"id": "DEMO-DELHI", "cityId": "delhi", "city": "Delhi", "name": "Demo Delhi", "scope": "delhi-nct", "active": true, "status": "open", "effectiveFrom": "2026-01-01T00:00:00Z", "pincodes": ["110024"]},
+    {"id": "DEMO-NOIDA", "cityId": "noida", "city": "Noida", "name": "Existing Noida demo", "scope": "demo-noida", "active": true, "status": "open", "effectiveFrom": "2026-01-01T00:00:00Z", "pincodes": ["201304"]}
+  ]
+}

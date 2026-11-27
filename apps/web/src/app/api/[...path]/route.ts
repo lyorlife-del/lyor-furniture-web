@@ -52,6 +52,18 @@ async function handler(
     "Content-Type": "application/json",
   };
   const identity = jar.get(demoCookie)?.value;
+  const preference = path.join("/") === "location-preference";
+  let guest = jar.get("lyor-location-guest")?.value;
+  if (preference && !demoIdentity(identity)) {
+    if (!guest && request.method !== "GET") {
+      return NextResponse.json(
+        { message: "Allow the location session cookie, then check and confirm your PIN again." },
+        { status: 409, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+    guest ??= crypto.randomUUID();
+    headers.cookie = "lyor-location-guest=" + encodeURIComponent(guest);
+  }
   if (demoIdentity(identity)) headers.authorization = "Bearer " + identity;
   const key = request.headers.get("idempotency-key");
   if (key) headers["Idempotency-Key"] = key;
@@ -71,13 +83,22 @@ async function handler(
       redirect: "error",
       signal: AbortSignal.timeout(12000),
     });
-    return new NextResponse(await response.text(), {
+    const outgoing = new NextResponse(await response.text(), {
       status: response.status,
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-store",
+        ...(response.headers.has("retry-after")
+          ? { "Retry-After": response.headers.get("retry-after")! }
+          : {}),
       },
     });
+    if (preference && guest && !demoIdentity(identity) && !jar.has("lyor-location-guest") && response.ok)
+      outgoing.cookies.set("lyor-location-guest", guest, {
+        httpOnly: true, sameSite: "strict", path: "/", maxAge: 60 * 60 * 24 * 90,
+        secure: request.nextUrl.protocol === "https:",
+      });
+    return outgoing;
   } catch {
     return NextResponse.json(
       {
